@@ -1,0 +1,244 @@
+﻿@* @model AnimeWorld.Models.AnimeCharacter
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>AnimeCharacter</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AnimeCharacterId" />
+            <div class="form-group">
+                <label asp-for="AnimeCharacterName" class="control-label"></label>
+                <input asp-for="AnimeCharacterName" class="form-control" />
+                <span asp-validation-for="AnimeCharacterName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BankBalance" class="control-label"></label>
+                <input asp-for="BankBalance" class="form-control" />
+                <span asp-validation-for="BankBalance" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsAlive" /> @Html.DisplayNameFor(model => model.IsAlive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CharacterPicture" class="control-label"></label>
+                <input asp-for="CharacterPicture" class="form-control" />
+                <span asp-validation-for="CharacterPicture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenresId" class="control-label"></label>
+                <select asp-for="GenresId" class="form-control" asp-items="ViewBag.GenresId"></select>
+                <span asp-validation-for="GenresId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@
+ @model AnimeWorld.Models.AnimeCharacterVM
+
+@{
+    ViewData["Title"] = "Edit Anime Character";
+    var vm = Model ?? new AnimeWorld.Models.AnimeCharacterVM();
+    var animeList = (vm.AnimeNames ?? new List<AnimeWorld.Models.AnimeName>()).ToList();
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0"><i class="bi bi-pencil-square"></i> Edit Anime Character</h3>
+        </div>
+        <div class="card-body p-4">
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="AnimeCharacterId" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="AnimeCharacterName" class="form-label fw-bold"></label>
+                    <input asp-for="AnimeCharacterName" class="form-control" />
+                    <span asp-validation-for="AnimeCharacterName" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="DateOfBirth" class="form-label fw-bold"></label>
+                        <input asp-for="DateOfBirth" type="date" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="BankBalance" class="form-label fw-bold"></label>
+                        <input asp-for="BankBalance" type="number" class="form-control" step="1" value="@Model.BankBalance.ToString("0.00")" />
+                        <span asp-validation-for="BankBalance" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center">
+                        <div class="form-check mt-4">
+                            <input asp-for="IsAlive" class="form-check-input" />
+                            <label asp-for="IsAlive" class="form-check-label fw-bold"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Character Picture</label>
+
+                    @* Show current image if exists *@
+                    @if (!string.IsNullOrEmpty(Model.CharacterPicture))
+                    {
+                        <div class="mb-2">
+                            <img src="@Url.Content("~/uploads/" + Model.CharacterPicture)"
+                                 alt="Character Picture"
+                                 class="img-thumbnail"
+                                 style="width: 120px; height: 120px; object-fit: cover; border-radius: 10px;" />
+                        </div>
+                        <small class="text-muted d-block mb-2">Current image above. Upload a new one to replace it.</small>
+                    }
+
+                    @* File input for new upload *@
+                    <input asp-for="CharacterPictureFile" type="file" class="form-control" />
+
+                    @* Hidden input to keep the existing filename if no new file is uploaded *@
+                    <input type="hidden" asp-for="CharacterPicture" />
+
+                    <span asp-validation-for="CharacterPictureFile" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label">Characters Life Summary</label>
+                    <textarea asp-for="Address" class="form-control" rows="3">@Model.Address</textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GenresId" class="form-label fw-bold">Genre</label>
+                    <select asp-for="GenresId" asp-items="ViewBag.Genres" class="form-select">
+                        <option value="">-- Select Genre --</option>
+                    </select>
+                    <span asp-validation-for="GenresId" class="text-danger"></span>
+                </div>
+
+                <hr class="border-success" />
+                <h4 class="text-success mb-3">Anime List</h4>
+
+                <table class="table table-bordered table-striped" id="animeTable">
+                    <thead class="table-success text-center">
+                        <tr>
+                            <th>Animation Name</th>
+                            <th>Total Episodes</th>
+                            <th>On Going?</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < animeList.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input name="AnimeNames[@i].AnimeNameId" type="hidden" value="@animeList[i].AnimeNameId" />
+                                    <input name="AnimeNames[@i].AnimationName" class="form-control" value="@animeList[i].AnimationName" />
+                                </td>
+                                <td>
+                                    <input name="AnimeNames[@i].TotalEp" type="number" class="form-control" value="@animeList[i].TotalEp" />
+                                </td>
+                                <td class="text-center">
+                                    <input name="AnimeNames[@i].OnGoing" type="checkbox" @(animeList[i].OnGoing ? "checked" : "") />
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm remove-anime">Remove</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <button type="button" id="addAnime" class="btn btn-outline-success mb-3">
+                    <i class="bi bi-plus-circle"></i> Add Anime
+                </button>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-save"></i> Update
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Template Row -->
+<table style="display:none">
+    <tbody id="animeRowTemplate">
+        <tr>
+            <td>
+                <input name="AnimeNames[__idx__].AnimeNameId" type="hidden" value="0" />
+                <input name="AnimeNames[__idx__].AnimationName" class="form-control" />
+            </td>
+            <td><input name="AnimeNames[__idx__].TotalEp" type="number" class="form-control" /></td>
+            <td class="text-center">
+                <input name="AnimeNames[__idx__].OnGoing" type="checkbox" />
+            </td>
+            <td class="text-center">
+                <button type="button" class="btn btn-outline-danger btn-sm remove-anime">Remove</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        (function () {
+            function reindex() {
+                $('#animeTable tbody tr').each(function (i, tr) {
+                    $(tr).find('input, select, textarea').each(function () {
+                        var name = $(this).attr('name');
+                        if (!name) return;
+                        var newName = name.replace(/AnimeNames\[\d+\]/, 'AnimeNames[' + i + ']');
+                        $(this).attr('name', newName);
+                    });
+                });
+            }
+
+            $('#addAnime').click(function () {
+                var index = $('#animeTable tbody tr').length;
+                var template = $('#animeRowTemplate').html().replace(/__idx__/g, index);
+                $('#animeTable tbody').append(template);
+                reindex();
+            });
+
+            $('#animeTable').on('click', '.remove-anime', function () {
+                $(this).closest('tr').remove();
+                reindex();
+            });
+
+            reindex();
+        })();
+    </script>
+}

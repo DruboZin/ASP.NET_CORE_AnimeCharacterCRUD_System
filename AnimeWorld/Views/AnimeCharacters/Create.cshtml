@@ -1,0 +1,320 @@
+﻿@* @model AnimeWorld.Models.AnimeCharacterVM
+
+@{
+    ViewData["Title"] = "Create";
+    var vm = Model ?? new AnimeWorld.Models.AnimeCharacterVM();
+    var animeList = (vm.AnimeNames ?? new List<AnimeWorld.Models.AnimeName>()).ToList();
+}
+
+
+
+<h2>Create Anime Character</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="AnimeCharacterName" class="form-label"></label>
+        <input asp-for="AnimeCharacterName" class="form-control" />
+        <span asp-validation-for="AnimeCharacterName" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="DateOfBirth" class="form-label"></label>
+            <input asp-for="DateOfBirth" type="date" class="form-control" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="BankBalance" class="form-label"></label>
+            <input asp-for="BankBalance" type="number" class="form-control" step="1" value="@Model.BankBalance.ToString("0.00")" />
+            <span asp-validation-for="BankBalance" class="text-danger"></span>
+        </div>
+        <div class="mb-3 form-check">
+            <input asp-for="IsAlive" class="form-check-input" />
+            <label asp-for="IsAlive" class="form-check-label"></label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Character Picture</label>
+        <input asp-for="CharacterPictureFile" type="file" class="form-control" />
+        <span asp-validation-for="CharacterPictureFile" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="GenresId" class="form-label">Genre</label>
+        <select asp-for="GenresId" asp-items="ViewBag.Genres" class="form-select">
+            <option value="">-- Select Genre --</option>
+        </select>
+        <span asp-validation-for="GenresId" class="text-danger"></span>
+    </div>
+
+    <hr />
+    <h4>Anime List</h4>
+    <table class="table" id="animeTable">
+        <thead><tr><th>Animation Name</th><th>Total Episodes</th><th>On Going?</th><th></th></tr></thead>
+        <tbody>
+            @for (int i = 0; i < animeList.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input name="AnimeNames[@i].AnimeNameId" type="hidden" value="@animeList[i].AnimeNameId" />
+                        <input name="AnimeNames[@i].AnimationName" class="form-control" value="@animeList[i].AnimationName" />
+                    </td>
+                    <td>
+                        <input name="AnimeNames[@i].TotalEp" type="number" class="form-control" value="@animeList[i].TotalEp" />
+                    </td>
+                    <td class="text-center">
+                        <input name="AnimeNames[@i].OnGoing" type="checkbox" @(animeList[i].OnGoing ? "checked" : "") />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-anime">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="button" id="addAnime" class="btn btn-secondary mb-3">Add Anime</button>
+    <hr />
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-link">Back to list</a>
+</form>
+
+<!-- Hidden Template Row -->
+<table style="display:none">
+    <tbody id="animeRowTemplate">
+        <tr>
+            <td>
+                <input name="AnimeNames[__idx__].AnimeNameId" type="hidden" value="0" />
+                <input name="AnimeNames[__idx__].AnimationName" class="form-control" />
+            </td>
+            <td><input name="AnimeNames[__idx__].TotalEp" type="number" class="form-control" /></td>
+            <td class="text-center">
+                <input name="AnimeNames[__idx__].OnGoing" type="checkbox" />
+            </td>
+            <td><button type="button" class="btn btn-danger btn-sm remove-anime">Remove</button></td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        (function () {
+            function reindex() {
+                $('#animeTable tbody tr').each(function (i, tr) {
+                    $(tr).find('input, select, textarea').each(function () {
+                        var name = $(this).attr('name');
+                        if (!name) return;
+                        var newName = name.replace(/AnimeNames\[\d+\]/, 'AnimeNames[' + i + ']');
+                        $(this).attr('name', newName);
+                    });
+                });
+            }
+
+            $('#addAnime').click(function () {
+                var index = $('#animeTable tbody tr').length;
+                var template = $('#animeRowTemplate').html().replace(/__idx__/g, index);
+                $('#animeTable tbody').append(template);
+                reindex();
+            });
+
+            $('#animeTable').on('click', '.remove-anime', function () {
+                $(this).closest('tr').remove();
+                reindex();
+            });
+
+            reindex();
+        })();
+    </script>
+}
+ *@
+ @model AnimeWorld.Models.AnimeCharacterVM
+
+@{
+    ViewData["Title"] = "Create Anime Character";
+    var vm = Model ?? new AnimeWorld.Models.AnimeCharacterVM();
+    var animeList = (vm.AnimeNames ?? new List<AnimeWorld.Models.AnimeName>()).ToList();
+}
+
+<div class="container py-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center rounded-top-4">
+            <h3 class="mb-0">Create Anime Character</h3>
+        </div>
+
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="row g-3">
+                    <!-- Character Name -->
+                    <div class="col-md-6">
+                        <label asp-for="AnimeCharacterName" class="form-label fw-semibold"></label>
+                        <input asp-for="AnimeCharacterName" class="form-control" placeholder="Enter character name" />
+                        <span asp-validation-for="AnimeCharacterName" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Date of Birth -->
+                    <div class="col-md-3">
+                        <label asp-for="DateOfBirth" class="form-label fw-semibold"></label>
+                        <input asp-for="DateOfBirth" type="date" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Bank Balance -->
+                    <div class="col-md-3">
+                        <label asp-for="BankBalance" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input asp-for="BankBalance" type="number" class="form-control" step="0.01" />
+                        </div>
+                        <span asp-validation-for="BankBalance" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Is Alive -->
+                    <div class="col-md-2 mt-3">
+                        <div class="form-check">
+                            <input asp-for="IsAlive" class="form-check-input" />
+                            <label asp-for="IsAlive" class="form-check-label fw-semibold"></label>
+                        </div>
+                    </div>
+
+                    <!-- Character Picture -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Character Picture</label>
+                        <input asp-for="CharacterPictureFile" type="file" class="form-control" />
+                        <span asp-validation-for="CharacterPictureFile" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label">Character life summary</label>
+                        <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <!-- Genre -->
+                    <div class="col-md-6">
+                        <label asp-for="GenresId" class="form-label fw-semibold">Genre</label>
+                        <select asp-for="GenresId" asp-items="ViewBag.Genres" class="form-select">
+                            <option value="">-- Select Genre --</option>
+                        </select>
+                        <span asp-validation-for="GenresId" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+
+                <!-- Anime List Section -->
+                <div class="mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Anime List</h5>
+                        <button type="button" id="addAnime" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-plus-circle"></i> Add Anime
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle text-center" id="animeTable">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Animation Name</th>
+                                    <th>Total Episodes</th>
+                                    <th>On Going?</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < animeList.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input name="AnimeNames[@i].AnimeNameId" type="hidden" value="@animeList[i].AnimeNameId" />
+                                            <input name="AnimeNames[@i].AnimationName" class="form-control" value="@animeList[i].AnimationName" />
+                                        </td>
+                                        <td>
+                                            <input name="AnimeNames[@i].TotalEp" type="number" class="form-control text-center" value="@animeList[i].TotalEp" />
+                                        </td>
+                                        <td>
+                                            <input name="AnimeNames[@i].OnGoing" type="checkbox" class="form-check-input" @(animeList[i].OnGoing ? "checked" : "") />
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm remove-anime">
+                                                <i class="bi bi-trash"></i> Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end gap-3">
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Template Row -->
+<table style="display:none">
+    <tbody id="animeRowTemplate">
+        <tr>
+            <td>
+                <input name="AnimeNames[__idx__].AnimeNameId" type="hidden" value="0" />
+                <input name="AnimeNames[__idx__].AnimationName" class="form-control" />
+            </td>
+            <td>
+                <input name="AnimeNames[__idx__].TotalEp" type="number" class="form-control text-center" />
+            </td>
+            <td>
+                <input name="AnimeNames[__idx__].OnGoing" type="checkbox" class="form-check-input" />
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm remove-anime">
+                    <i class="bi bi-trash"></i> Remove
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script>
+        (function () {
+            function reindex() {
+                $('#animeTable tbody tr').each(function (i, tr) {
+                    $(tr).find('input, select, textarea').each(function () {
+                        var name = $(this).attr('name');
+                        if (!name) return;
+                        var newName = name.replace(/AnimeNames\[\d+\]/, 'AnimeNames[' + i + ']');
+                        $(this).attr('name', newName);
+                    });
+                });
+            }
+
+            $('#addAnime').click(function () {
+                var index = $('#animeTable tbody tr').length;
+                var template = $('#animeRowTemplate').html().replace(/__idx__/g, index);
+                $('#animeTable tbody').append(template);
+                reindex();
+            });
+
+            $('#animeTable').on('click', '.remove-anime', function () {
+                $(this).closest('tr').remove();
+                reindex();
+            });
+
+            reindex();
+        })();
+    </script>
+}

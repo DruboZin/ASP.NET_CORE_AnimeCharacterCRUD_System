@@ -1,0 +1,102 @@
+﻿@* @{
+    ViewData["Title"] = "Statistics Dashboard";
+}
+
+<h2 class="text-center mb-4">Anime Character Statistics</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card p-3 bg-primary text-white">
+            <h4>Total Characters</h4>
+            <h2>@ViewBag.TotalCharacters</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 bg-success text-white">
+            <h4>Total Bank Balance</h4>
+            <h2>@ViewBag.TotalBalance</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 bg-info text-white">
+            <h4>Average Bank Balance</h4>
+            <h2>@ViewBag.AverageBalance</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 bg-warning text-white">
+            <h4>Alive / Dead</h4>
+            <h2>@ViewBag.AliveCount / @ViewBag.DeadCount</h2>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h3>Episode Statistics</h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card p-3 bg-dark text-white">
+            <h4>Max Episodes</h4>
+            <h3>@ViewBag.MaxEpisodes</h3>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3 bg-secondary text-white">
+            <h4>Min Episodes</h4>
+            <h3>@ViewBag.MinEpisodes</h3>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h3>Total Episodes per Character</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Character Name</th>
+            <th>Total Episodes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.EpisodeTotals)
+        {
+            <tr>
+                <td>@item.AnimeCharacterName</td>
+                <td>@item.TotalEpisodes</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h3>Characters by Genre</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Genre</th>
+            <th>Total Characters</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.CharactersByGenre)
+        {
+            <tr>
+                <td>@item.Genre</td>
+                <td>@item.TotalCharacters</td>
+            </tr>
+        }
+    </tbody>
+</table>
+ *@
+<div class="my-4">
+    @await Component.InvokeAsync("AnimeStats")
+</div>
+
+<hr />

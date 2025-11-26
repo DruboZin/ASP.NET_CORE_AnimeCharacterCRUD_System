@@ -1,0 +1,156 @@
+﻿@* @model AnimeWorld.Models.AnimeCharacter
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>AnimeCharacter</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AnimeCharacterName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AnimeCharacterName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BankBalance)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BankBalance)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsAlive)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsAlive)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CharacterPicture)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CharacterPicture)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Genres)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Genres.GenresId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.AnimeCharacterId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+ *@
+ @model AnimeWorld.Models.AnimeCharacterVM
+
+@{
+    ViewData["Title"] = "Character Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"><i class="bi bi-person-badge"></i> Character Details</h3>
+            <a asp-action="Edit" asp-route-id="@Model.AnimeCharacterId" class="btn btn-light btn-sm">
+                <i class="bi bi-pencil-square text-success"></i> Edit
+            </a>
+        </div>
+
+        <div class="card-body p-4">
+            <dl class="row">
+                <dt class="col-sm-3 text-success fw-bold">Character ID</dt>
+                <dd class="col-sm-9">@Model.AnimeCharacterId</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Name</dt>
+                <dd class="col-sm-9">@Model.AnimeCharacterName</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Date of Birth</dt>
+                <dd class="col-sm-9">@Model.DateOfBirth.ToString("yyyy-MM-dd")</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Bank Balance</dt>
+                <dd class="col-sm-9">@Model.BankBalance.ToString("N2")</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Alive?</dt>
+                <dd class="col-sm-9">
+                    @(Model.IsAlive ? "✅ Yes" : "❌ No")
+                </dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Genre</dt>
+                <dd class="col-sm-9">@ViewBag.GenreName</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Character Picture</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.CharacterPicture))
+                    {
+                        <img src="@Url.Content("~/uploads/" + Model.CharacterPicture)"
+                             alt="@Model.AnimeCharacterName"
+                             class="img-thumbnail shadow-sm"
+                             style="width: 160px; height: 160px; object-fit: cover; border-radius: 10px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted fst-italic">No picture available</span>
+                    }
+                </dd>
+                <dt class="col-sm-3 text-success fw-bold">Characters Life Summary</dt>
+                <dd class="col-sm-9 text-break" style="white-space: pre-wrap;">@Model.Address</dd>
+
+
+            </dl>
+
+            <hr class="border-success" />
+
+            <h5 class="text-success fw-bold mb-3"><i class="bi bi-collection-play"></i> Anime List</h5>
+
+            @if (Model.AnimeNames != null && Model.AnimeNames.Any())
+            {
+                <table class="table table-bordered table-striped">
+                    <thead class="table-success text-center">
+                        <tr>
+                            <th>Anime Name</th>
+                            <th>Total Episodes</th>
+                            <th>Ongoing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var anime in Model.AnimeNames)
+                        {
+                            <tr>
+                                <td>@anime.AnimationName</td>
+                                <td class="text-center">@anime.TotalEp</td>
+                                <td class="text-center">
+                                    @(anime.OnGoing ? "Yes" : "NO Completed")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted fst-italic">No anime list added.</p>
+            }
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left-circle"></i> Back to List
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.AnimeCharacterId" class="btn btn-success px-4">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36119.2 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimeWorld", "AnimeWorld\AnimeWorld.csproj", "{B9493345-70C3-4744-BCE8-B4C2B57683E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9493345-70C3-4744-BCE8-B4C2B57683E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9493345-70C3-4744-BCE8-B4C2B57683E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9493345-70C3-4744-BCE8-B4C2B57683E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9493345-70C3-4744-BCE8-B4C2B57683E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {32154569-F3A6-4B96-ABA0-D4C69CDAD345}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,59 @@
+﻿@model AnimeStatsViewModel
+
+<div class="card p-3 shadow-sm">
+    <h3 class="mb-3">Anime Statistics</h3>
+
+    <div class="row text-center">
+        <div class="col-md-3">
+            <h5>Total Characters</h5>
+            <h3>@Model.TotalCharacters</h3>
+        </div>
+        <div class="col-md-3">
+            <h5>Total Balance</h5>
+            <h3>@Model.TotalBalance</h3>
+        </div>
+        <div class="col-md-3">
+            <h5>Avg Balance</h5>
+            <h3>@Model.AvgBalance</h3>
+        </div>
+        <div class="col-md-3">
+            <h5>Alive / Dead</h5>
+            <h3>@Model.AliveCount / @Model.DeadCount</h3>
+        </div>
+    </div>
+
+    <hr />
+
+    <h4>Episodes Statistics</h4>
+    <div class="row text-center">
+        <div class="col-md-6">
+            <h5>Max Episodes</h5>
+            <h2>@Model.MaxEpisodes</h2>
+        </div>
+        <div class="col-md-6">
+            <h5>Min Episodes</h5>
+            <h2>@Model.MinEpisodes</h2>
+        </div>
+    </div>
+
+    <hr />
+
+    <h4>Characters by Genre</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Genre</th>
+                <th>Total Characters</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model.CharactersByGenre)
+            {
+                <tr>
+                    <td>@g.Genre</td>
+                    <td>@g.TotalCharacters</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,114 @@
+﻿@* @model AnimeWorld.Models.AnimeCharacter
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>AnimeCharacter</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AnimeCharacterName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AnimeCharacterName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BankBalance)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BankBalance)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsAlive)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsAlive)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CharacterPicture)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CharacterPicture)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Genres)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Genres.GenresId)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AnimeCharacterId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
+ *@
+ @model AnimeWorld.Models.AnimeCharacterVM
+
+@{
+    ViewData["Title"] = "Delete Anime Character";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-danger text-white">
+            <h3 class="mb-0"><i class="bi bi-trash3"></i> Confirm Delete</h3>
+        </div>
+        <div class="card-body p-4">
+            <h5 class="text-danger mb-3">Are you sure you want to delete this Anime Character?</h5>
+
+            <dl class="row">
+                <dt class="col-sm-3 text-success fw-bold">Character ID</dt>
+                <dd class="col-sm-9">@Model.AnimeCharacterId</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Name</dt>
+                <dd class="col-sm-9">@Model.AnimeCharacterName</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Genre</dt>
+                <dd class="col-sm-9">@ViewBag.GenreName</dd>
+
+                <dt class="col-sm-3 text-success fw-bold">Character Picture</dt>
+                <dd class="col-sm-9">
+                    @if (!string.IsNullOrEmpty(Model.CharacterPicture))
+                    {
+                        <img src="@Url.Content("~/uploads/" + Model.CharacterPicture)"
+                             alt="@Model.AnimeCharacterName"
+                             class="img-thumbnail"
+                             style="width: 120px; height: 120px; object-fit: cover; border-radius: 10px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted fst-italic">No picture available</span>
+                    }
+                </dd>
+            </dl>
+
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="AnimeCharacterId" />
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="bi bi-trash3"></i> Delete
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
